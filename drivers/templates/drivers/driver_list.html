@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Driver Management</h2>
+
+        <a href="{% url 'driver_create' %}" class="btn btn-primary">
+            + Add Driver
+        </a>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card mb-4">
+        <div class="card-body">
+
+            <form method="GET" class="d-flex gap-2">
+
+                <input
+                    type="text"
+                    name="search"
+                    class="form-control"
+                    placeholder="Search by name, employee ID, phone..."
+                    value="{{ search }}"
+                >
+
+                <button type="submit" class="btn btn-dark">
+                    Search
+                </button>
+
+                <a href="{% url 'driver_list' %}" class="btn btn-secondary">
+                    Reset
+                </a>
+
+            </form>
+
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Total Drivers: {{ total_drivers }}
+        </div>
+
+        <div class="card-body table-responsive">
+
+            <table class="table table-bordered table-hover">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>Employee ID</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Licence Number</th>
+                        <th>Licence Expiry</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for driver in drivers %}
+
+                    <tr>
+                        <td>{{ driver.employee_id }}</td>
+
+                        <td>
+                            {{ driver.first_name }} {{ driver.last_name }}
+                        </td>
+
+                        <td>{{ driver.phone }}</td>
+
+                        <td>{{ driver.license_number }}</td>
+
+                        <td>{{ driver.license_expiry }}</td>
+
+                        <td>
+                            <span class="badge bg-info">
+                                {{ driver.get_status_display }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <a href="{% url 'driver_detail' driver.pk %}"
+                               class="btn btn-sm btn-info">
+                                View
+                            </a>
+
+                            <a href="{% url 'driver_update' driver.pk %}"
+                               class="btn btn-sm btn-warning">
+                                Edit
+                            </a>
+
+                            <a href="{% url 'driver_delete' driver.pk %}"
+                               class="btn btn-sm btn-danger">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="7" class="text-center">
+                            No drivers found.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
