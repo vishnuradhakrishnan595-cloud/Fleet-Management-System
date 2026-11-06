@@ -1,0 +1,99 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between mb-4">
+        <h2>Vehicle Details</h2>
+
+        <div>
+            <a href="{% url 'vehicle_update' vehicle.pk %}"
+               class="btn btn-warning">Edit Vehicle</a>
+
+            <a href="{% url 'vehicle_list' %}"
+               class="btn btn-secondary">Back</a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            {% if vehicle.image %}
+                <img src="{{ vehicle.image.url }}"
+                     class="img-fluid rounded mb-4"
+                     style="max-width: 350px;"
+                     alt="Vehicle image">
+            {% endif %}
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <strong>Vehicle Number:</strong>
+                    <p>{{ vehicle.vehicle_number }}</p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Vehicle Name:</strong>
+                    <p>{{ vehicle.vehicle_name }}</p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Vehicle Type:</strong>
+                    <p>{{ vehicle.get_vehicle_type_display }}</p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Brand:</strong>
+                    <p>{{ vehicle.brand }}</p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Model:</strong>
+                    <p>{{ vehicle.model }}</p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Year:</strong>
+                    <p>{{ vehicle.year }}</p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Fuel Type:</strong>
+                    <p>{{ vehicle.get_fuel_type_display }}</p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Capacity:</strong>
+                    <p>{{ vehicle.capacity }} KG</p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Registration Date:</strong>
+                    <p>{{ vehicle.registration_date }}</p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Insurance Expiry:</strong>
+                    <p>{{ vehicle.insurance_expiry }}</p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Status:</strong>
+                    <p>{{ vehicle.get_status_display }}</p>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Created At:</strong>
+                    <p>{{ vehicle.created_at }}</p>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
