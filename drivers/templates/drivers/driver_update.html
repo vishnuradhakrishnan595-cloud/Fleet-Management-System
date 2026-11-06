@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2>Update Driver</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card mt-3">
+        <div class="card-body">
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label>Employee ID</label>
+                        <input type="text" name="employee_id"
+                               value="{{ driver.employee_id }}"
+                               class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>First Name</label>
+                        <input type="text" name="first_name"
+                               value="{{ driver.first_name }}"
+                               class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Last Name</label>
+                        <input type="text" name="last_name"
+                               value="{{ driver.last_name }}"
+                               class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Email</label>
+                        <input type="email" name="email"
+                               value="{{ driver.email }}"
+                               class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Phone</label>
+                        <input type="text" name="phone"
+                               value="{{ driver.phone }}"
+                               class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Licence Number</label>
+                        <input type="text" name="license_number"
+                               value="{{ driver.license_number }}"
+                               class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Licence Type</label>
+                        <select name="license_type" class="form-select" required>
+                            <option value="LMV" {% if driver.license_type == 'LMV' %}selected{% endif %}>Light Motor Vehicle</option>
+                            <option value="HMV" {% if driver.license_type == 'HMV' %}selected{% endif %}>Heavy Motor Vehicle</option>
+                            <option value="HGMV" {% if driver.license_type == 'HGMV' %}selected{% endif %}>Heavy Goods Motor Vehicle</option>
+                            <option value="HPMV" {% if driver.license_type == 'HPMV' %}selected{% endif %}>Heavy Passenger Motor Vehicle</option>
+                            <option value="MCWG" {% if driver.license_type == 'MCWG' %}selected{% endif %}>Motorcycle With Gear</option>
+                            <option value="OTHER" {% if driver.license_type == 'OTHER' %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Licence Expiry</label>
+                        <input type="date" name="license_expiry"
+                               value="{{ driver.license_expiry|date:'Y-m-d' }}"
+                               class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Date of Joining</label>
+                        <input type="date" name="date_of_joining"
+                               value="{{ driver.date_of_joining|date:'Y-m-d' }}"
+                               class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Status</label>
+                        <select name="status" class="form-select">
+                            <option value="available" {% if driver.status == 'available' %}selected{% endif %}>Available</option>
+                            <option value="on_trip" {% if driver.status == 'on_trip' %}selected{% endif %}>On Trip</option>
+                            <option value="on_leave" {% if driver.status == 'on_leave' %}selected{% endif %}>On Leave</option>
+                            <option value="inactive" {% if driver.status == 'inactive' %}selected{% endif %}>Inactive</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label>Address</label>
+                        <textarea name="address" class="form-control"
+                                  rows="3" required>{{ driver.address }}</textarea>
+                    </div>
+
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    Update Driver
+                </button>
+
+                <a href="{% url 'driver_list' %}" class="btn btn-secondary">
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
