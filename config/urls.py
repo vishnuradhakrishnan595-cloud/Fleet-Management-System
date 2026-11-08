@@ -25,6 +25,7 @@ urlpatterns = [
 
     # Drivers
     path('drivers/', include('drivers.urls')),
+    path('documents/', include('documents.urls')),
 ]
 
 
