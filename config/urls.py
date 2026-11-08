@@ -1,3 +1,4 @@
+
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -14,7 +15,6 @@ def home(request):
 
 urlpatterns = [
     path('', home, name='home'),
-
     path('admin/', admin.site.urls),
 
     # Accounts
@@ -25,10 +25,15 @@ urlpatterns = [
 
     # Drivers
     path('drivers/', include('drivers.urls')),
-    path('documents/', include('documents.urls')),
-    path('expenses/', include('expenses.urls')),
-    path('fuel/', include('fuel.urls')),
 
+    # Documents
+    path('documents/', include('documents.urls')),
+
+    # Expenses
+    path('expenses/', include('expenses.urls')),
+
+    # Fuel
+    path('fuel/', include('fuel.urls')),
 ]
 
 
