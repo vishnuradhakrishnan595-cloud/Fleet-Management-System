@@ -34,6 +34,9 @@ urlpatterns = [
 
     # Fuel
     path('fuel/', include('fuel.urls')),
+
+    # Incidents
+    path('incidents/', include('incidents.urls')),
 ]
 
 
