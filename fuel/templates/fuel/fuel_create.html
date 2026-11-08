@@ -1,0 +1,137 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+
+    <div class="mb-4">
+        <h2 class="fw-bold">Add Fuel Record</h2>
+        <p class="text-muted">Record fuel consumption for a vehicle.</p>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <label class="form-label">Select Vehicle</label>
+                        <select name="vehicle" class="form-select" required>
+                            <option value="">Choose Vehicle</option>
+
+                            {% for vehicle in vehicles %}
+                            <option value="{{ vehicle.pk }}">
+                                {{ vehicle.vehicle_number }} - {{ vehicle.vehicle_name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Fuel Type</label>
+                        <select name="fuel_type" class="form-select" required>
+                            <option value="">Select Fuel Type</option>
+                            <option value="petrol">Petrol</option>
+                            <option value="diesel">Diesel</option>
+                            <option value="cng">CNG</option>
+                            <option value="electric">Electric</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Quantity (Litres / Units)</label>
+                        <input type="number"
+                               name="quantity"
+                               class="form-control"
+                               step="0.01"
+                               min="0.01"
+                               placeholder="Enter quantity"
+                               required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Price Per Unit (₹)</label>
+                        <input type="number"
+                               name="price_per_unit"
+                               class="form-control"
+                               step="0.01"
+                               min="0.01"
+                               placeholder="Enter price per unit"
+                               required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Odometer Reading</label>
+                        <input type="number"
+                               name="odometer_reading"
+                               class="form-control"
+                               step="0.01"
+                               min="0"
+                               placeholder="Enter current odometer reading"
+                               required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Fuel Date</label>
+                        <input type="date"
+                               name="fuel_date"
+                               class="form-control"
+                               required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Driver</label>
+                        <input type="text"
+                               class="form-control"
+                               value="{{ request.user }}"
+                               disabled>
+                        <small class="text-muted">
+                            The logged-in user will be recorded as the driver.
+                        </small>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Fuel Station</label>
+                        <input type="text"
+                               name="station_name"
+                               class="form-control"
+                               placeholder="Enter fuel station name">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Upload Receipt</label>
+                        <input type="file"
+                               name="receipt"
+                               class="form-control">
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Notes</label>
+                        <textarea name="notes"
+                                  class="form-control"
+                                  rows="4"
+                                  placeholder="Enter additional details..."></textarea>
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <button type="submit" class="btn btn-primary">
+                    Save Fuel Record
+                </button>
+
+                <a href="{% url 'fuel_list' %}" class="btn btn-secondary">
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}
