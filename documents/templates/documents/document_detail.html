@@ -1,0 +1,80 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>Document Details</h2>
+            <p class="text-muted">View vehicle document information</p>
+        </div>
+
+        <a href="{% url 'documents:document_list' %}" class="btn btn-secondary">
+            Back to Documents
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <h4>{{ document.title }}</h4>
+            <hr>
+
+            <p><strong>Vehicle Number:</strong>
+                {{ document.vehicle.vehicle_number }}
+            </p>
+
+            <p><strong>Vehicle Name:</strong>
+                {{ document.vehicle.vehicle_name }}
+            </p>
+
+            <p><strong>Document Type:</strong>
+                {{ document.get_document_type_display }}
+            </p>
+
+            <p><strong>Issue Date:</strong>
+                {{ document.issue_date|default:"Not provided" }}
+            </p>
+
+            <p><strong>Expiry Date:</strong>
+                {{ document.expiry_date|default:"Not provided" }}
+            </p>
+
+            <p><strong>Description:</strong>
+                {{ document.description|default:"No description" }}
+            </p>
+
+            <p><strong>Uploaded By:</strong>
+                {{ document.uploaded_by|default:"Unknown" }}
+            </p>
+
+            <p><strong>Uploaded At:</strong>
+                {{ document.uploaded_at|date:"d M Y, h:i A" }}
+            </p>
+
+            {% if document.file %}
+                <a href="{{ document.file.url }}"
+                   target="_blank"
+                   class="btn btn-success">
+                    View / Download Document
+                </a>
+            {% endif %}
+
+            <hr>
+
+            <a href="{% url 'documents:document_update' document.pk %}"
+               class="btn btn-primary">
+                Edit Document
+            </a>
+
+            <a href="{% url 'documents:document_delete' document.pk %}"
+               class="btn btn-danger">
+                Delete Document
+            </a>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}
