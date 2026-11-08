@@ -1,0 +1,120 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+
+    <div class="mb-4">
+        <h2>{{ page_title }}</h2>
+        <p class="text-muted">Manage vehicle documents</p>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label">Select Vehicle</label>
+
+                    <select name="vehicle" class="form-select" required>
+                        <option value="">Choose Vehicle</option>
+
+                        {% for vehicle in vehicles %}
+                            <option value="{{ vehicle.pk }}"
+                                {% if document and document.vehicle_id == vehicle.pk %}
+                                    selected
+                                {% endif %}>
+                                {{ vehicle.vehicle_number }} - {{ vehicle.vehicle_name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Document Title</label>
+
+                    <input type="text"
+                           name="title"
+                           class="form-control"
+                           value="{{ document.title|default:'' }}"
+                           required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Document Type</label>
+
+                    <select name="document_type" class="form-select" required>
+                        <option value="">Choose Document Type</option>
+
+                        {% for value, label in document_types %}
+                            <option value="{{ value }}"
+                                {% if document and document.document_type == value %}
+                                    selected
+                                {% endif %}>
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Upload File</label>
+
+                    <input type="file"
+                           name="file"
+                           class="form-control"
+                           {% if not document %}required{% endif %}>
+
+                    {% if document and document.file %}
+                        <small class="text-muted">
+                            Current file: {{ document.file.name }}
+                        </small>
+                    {% endif %}
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Issue Date</label>
+
+                        <input type="date"
+                               name="issue_date"
+                               class="form-control"
+                               value="{{ document.issue_date|date:'Y-m-d' }}">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Expiry Date</label>
+
+                        <input type="date"
+                               name="expiry_date"
+                               class="form-control"
+                               value="{{ document.expiry_date|date:'Y-m-d' }}">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+
+                    <textarea name="description"
+                              class="form-control"
+                              rows="4">{{ document.description|default:'' }}</textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    {% if document %}Update Document{% else %}Upload Document{% endif %}
+                </button>
+
+                <a href="{% url 'documents:document_list' %}"
+                   class="btn btn-secondary">
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}
