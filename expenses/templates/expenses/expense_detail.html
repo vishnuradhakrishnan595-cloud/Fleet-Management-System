@@ -1,0 +1,102 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold">Expense Details</h2>
+            <p class="text-muted">View complete expense information.</p>
+        </div>
+
+        <a href="{% url 'expense_list' %}" class="btn btn-secondary">
+            Back to Expenses
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+
+            <h4>{{ expense.title }}</h4>
+            <hr>
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    <strong>Category</strong>
+                    <p>{{ expense.get_category_display }}</p>
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Amount</strong>
+                    <p class="fw-bold text-success">
+                        ₹{{ expense.amount|floatformat:2 }}
+                    </p>
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Vehicle</strong>
+                    <p>
+                        {% if expense.vehicle %}
+                            {{ expense.vehicle.vehicle_number }} -
+                            {{ expense.vehicle.vehicle_name }}
+                        {% else %}
+                            Not assigned
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Expense Date</strong>
+                    <p>{{ expense.expense_date|date:"d M Y" }}</p>
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Recorded By</strong>
+                    <p>{{ expense.recorded_by|default:"Unknown" }}</p>
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Created At</strong>
+                    <p>{{ expense.created_at|date:"d M Y, h:i A" }}</p>
+                </div>
+
+                <div class="col-12">
+                    <strong>Description</strong>
+                    <p>{{ expense.description|default:"No description provided." }}</p>
+                </div>
+
+                <div class="col-12">
+                    <strong>Receipt</strong>
+                    <p>
+                        {% if expense.receipt %}
+                            <a href="{{ expense.receipt.url }}" target="_blank"
+                               class="btn btn-sm btn-outline-primary">
+                                View Receipt
+                            </a>
+                        {% else %}
+                            <span class="text-muted">No receipt uploaded.</span>
+                        {% endif %}
+                    </p>
+                </div>
+
+            </div>
+
+            <hr>
+
+            <a href="{% url 'expense_update' expense.pk %}"
+               class="btn btn-primary">
+                Edit Expense
+            </a>
+
+            <a href="{% url 'expense_list' %}"
+               class="btn btn-secondary">
+                Back
+            </a>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}

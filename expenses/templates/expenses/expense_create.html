@@ -1,0 +1,108 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+
+    <div class="mb-4">
+        <h2 class="fw-bold">Add New Expense</h2>
+        <p class="text-muted">Record a new fleet expense.</p>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <label class="form-label">Expense Title</label>
+                        <input type="text"
+                               name="title"
+                               class="form-control"
+                               placeholder="Example: Monthly vehicle service"
+                               required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Category</label>
+                        <select name="category" class="form-select" required>
+                            <option value="">Select Category</option>
+                            <option value="fuel">Fuel</option>
+                            <option value="maintenance">Maintenance</option>
+                            <option value="insurance">Insurance</option>
+                            <option value="salary">Driver Salary</option>
+                            <option value="toll">Toll</option>
+                            <option value="parking">Parking</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Vehicle</label>
+                        <select name="vehicle" class="form-select">
+                            <option value="">No Vehicle / General Expense</option>
+
+                            {% for vehicle in vehicles %}
+                            <option value="{{ vehicle.pk }}">
+                                {{ vehicle.vehicle_number }} - {{ vehicle.vehicle_name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Amount (₹)</label>
+                        <input type="number"
+                               name="amount"
+                               class="form-control"
+                               step="0.01"
+                               min="0.01"
+                               placeholder="Enter amount"
+                               required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Expense Date</label>
+                        <input type="date"
+                               name="expense_date"
+                               class="form-control"
+                               required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Receipt</label>
+                        <input type="file"
+                               name="receipt"
+                               class="form-control">
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Description</label>
+                        <textarea name="description"
+                                  class="form-control"
+                                  rows="4"
+                                  placeholder="Enter expense details..."></textarea>
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <button type="submit" class="btn btn-primary">
+                    Save Expense
+                </button>
+
+                <a href="{% url 'expense_list' %}" class="btn btn-secondary">
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}
