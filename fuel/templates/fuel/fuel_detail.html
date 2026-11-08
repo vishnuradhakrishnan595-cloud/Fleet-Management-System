@@ -1,0 +1,116 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold">Fuel Record Details</h2>
+            <p class="text-muted">Complete fuel transaction information.</p>
+        </div>
+
+        <a href="{% url 'fuel_list' %}" class="btn btn-secondary">
+            Back to Fuel Records
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+
+            <h4>Vehicle: {{ record.vehicle.vehicle_number }}</h4>
+            <hr>
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    <strong>Vehicle Name</strong>
+                    <p>{{ record.vehicle.vehicle_name }}</p>
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Fuel Type</strong>
+                    <p>{{ record.get_fuel_type_display }}</p>
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Quantity</strong>
+                    <p>{{ record.quantity }}</p>
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Price Per Unit</strong>
+                    <p>₹{{ record.price_per_unit|floatformat:2 }}</p>
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Total Cost</strong>
+                    <p class="fw-bold text-success">
+                        ₹{{ record.total_cost|floatformat:2 }}
+                    </p>
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Odometer Reading</strong>
+                    <p>{{ record.odometer_reading }}</p>
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Fuel Date</strong>
+                    <p>{{ record.fuel_date|date:"d M Y" }}</p>
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Driver</strong>
+                    <p>{{ record.driver|default:"Not assigned" }}</p>
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Fuel Station</strong>
+                    <p>{{ record.station_name|default:"Not provided" }}</p>
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Created At</strong>
+                    <p>{{ record.created_at|date:"d M Y, h:i A" }}</p>
+                </div>
+
+                <div class="col-12">
+                    <strong>Notes</strong>
+                    <p>{{ record.notes|default:"No notes provided." }}</p>
+                </div>
+
+                <div class="col-12">
+                    <strong>Receipt</strong>
+                    <p>
+                        {% if record.receipt %}
+                            <a href="{{ record.receipt.url }}"
+                               target="_blank"
+                               class="btn btn-sm btn-outline-primary">
+                                View / Download Receipt
+                            </a>
+                        {% else %}
+                            <span class="text-muted">No receipt uploaded.</span>
+                        {% endif %}
+                    </p>
+                </div>
+
+            </div>
+
+            <hr>
+
+            <a href="{% url 'fuel_update' record.pk %}"
+               class="btn btn-primary">
+                Edit Fuel Record
+            </a>
+
+            <a href="{% url 'fuel_list' %}"
+               class="btn btn-secondary">
+                Back
+            </a>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}
