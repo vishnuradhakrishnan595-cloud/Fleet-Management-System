@@ -1,0 +1,132 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+
+    <div class="mb-4">
+        <h2 class="fw-bold">Update Fuel Record</h2>
+        <p class="text-muted">Edit existing fuel transaction information.</p>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <label class="form-label">Select Vehicle</label>
+                        <select name="vehicle" class="form-select" required>
+                            {% for vehicle in vehicles %}
+                            <option value="{{ vehicle.pk }}"
+                                {% if record.vehicle_id == vehicle.pk %}selected{% endif %}>
+                                {{ vehicle.vehicle_number }} - {{ vehicle.vehicle_name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Fuel Type</label>
+                        <select name="fuel_type" class="form-select" required>
+                            {% for value, label in record.FUEL_CHOICES %}
+                            <option value="{{ value }}"
+                                {% if record.fuel_type == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Quantity</label>
+                        <input type="number"
+                               name="quantity"
+                               class="form-control"
+                               step="0.01"
+                               min="0.01"
+                               value="{{ record.quantity }}"
+                               required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Price Per Unit (₹)</label>
+                        <input type="number"
+                               name="price_per_unit"
+                               class="form-control"
+                               step="0.01"
+                               min="0.01"
+                               value="{{ record.price_per_unit }}"
+                               required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Odometer Reading</label>
+                        <input type="number"
+                               name="odometer_reading"
+                               class="form-control"
+                               step="0.01"
+                               min="0"
+                               value="{{ record.odometer_reading }}"
+                               required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Fuel Date</label>
+                        <input type="date"
+                               name="fuel_date"
+                               class="form-control"
+                               value="{{ record.fuel_date|date:'Y-m-d' }}"
+                               required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Fuel Station</label>
+                        <input type="text"
+                               name="station_name"
+                               class="form-control"
+                               value="{{ record.station_name }}">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Replace Receipt</label>
+                        <input type="file"
+                               name="receipt"
+                               class="form-control">
+
+                        {% if record.receipt %}
+                        <small class="text-muted">
+                            Current receipt: {{ record.receipt.name }}
+                        </small>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Notes</label>
+                        <textarea name="notes"
+                                  class="form-control"
+                                  rows="4">{{ record.notes }}</textarea>
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <button type="submit" class="btn btn-primary">
+                    Update Fuel Record
+                </button>
+
+                <a href="{% url 'fuel_list' %}" class="btn btn-secondary">
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}
