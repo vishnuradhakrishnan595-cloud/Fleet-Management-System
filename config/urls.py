@@ -37,6 +37,9 @@ urlpatterns = [
 
     # Incidents
     path('incidents/', include('incidents.urls')),
+
+    # Maintenance
+    path('maintenance/', include('maintenance.urls')),
 ]
 
 
