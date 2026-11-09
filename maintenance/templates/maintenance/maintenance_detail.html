@@ -1,0 +1,123 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>Maintenance Details</h2>
+            <p class="text-muted">View complete service information.</p>
+        </div>
+
+        <div>
+            <a href="{% url 'maintenance_update' record.pk %}"
+               class="btn btn-warning">
+                Edit
+            </a>
+
+            <a href="{% url 'maintenance_list' %}"
+               class="btn btn-outline-secondary">
+                Back
+            </a>
+        </div>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card shadow-sm">
+
+        <div class="card-header">
+            <h5 class="mb-0">{{ record.title }}</h5>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-4">
+
+                <div class="col-md-6">
+                    <strong>Vehicle Number</strong>
+                    <p>{{ record.vehicle.vehicle_number }}</p>
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Vehicle Name</strong>
+                    <p>{{ record.vehicle.vehicle_name }}</p>
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Maintenance Type</strong>
+                    <p>{{ record.get_maintenance_type_display }}</p>
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Status</strong>
+                    <p>{{ record.get_status_display }}</p>
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Service Date</strong>
+                    <p>{{ record.service_date|date:"d M Y" }}</p>
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Next Service Date</strong>
+                    <p>
+                        {% if record.next_service_date %}
+                            {{ record.next_service_date|date:"d M Y" }}
+                        {% else %}
+                            Not scheduled
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Odometer Reading</strong>
+                    <p>{{ record.odometer_reading }} km</p>
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Service Center</strong>
+                    <p>{{ record.service_center }}</p>
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Maintenance Cost</strong>
+                    <p>₹{{ record.cost|floatformat:2 }}</p>
+                </div>
+
+                <div class="col-md-6">
+                    <strong>Performed By</strong>
+                    <p>{{ record.performed_by|default:"Not specified" }}</p>
+                </div>
+
+                <div class="col-12">
+                    <strong>Description</strong>
+                    <p>{{ record.description|linebreaksbr }}</p>
+                </div>
+
+                <div class="col-12">
+                    <small class="text-muted">
+                        Created on:
+                        {{ record.created_at|date:"d M Y, h:i A" }}
+                    </small>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a href="{% url 'maintenance_delete' record.pk %}"
+           class="btn btn-outline-danger">
+            Delete Maintenance Record
+        </a>
+    </div>
+
+</div>
+{% endblock %}
