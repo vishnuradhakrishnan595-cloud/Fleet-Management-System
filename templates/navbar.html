@@ -1,0 +1,64 @@
+
+<header class="top-navbar">
+
+    <div class="navbar-left">
+
+        <button class="menu-toggle"
+                type="button"
+                onclick="toggleSidebar()">
+            ☰
+        </button>
+
+        <div>
+            <div class="navbar-heading">
+                Fleet Management System
+            </div>
+
+            <div class="navbar-subtitle">
+                Manage your fleet operations
+            </div>
+        </div>
+
+    </div>
+
+    <div class="navbar-right">
+
+        <a href="/notifications/" class="notification-link"
+           title="Notifications">
+            ♧
+            <span class="notification-dot"></span>
+        </a>
+
+        <div class="profile">
+
+            <div class="profile-avatar">
+                {% if request.user.is_authenticated %}
+                    {{ request.user.username|first|upper }}
+                {% else %}
+                    G
+                {% endif %}
+            </div>
+
+            <div class="profile-details">
+                <div class="profile-name">
+                    {% if request.user.is_authenticated %}
+                        {{ request.user.username }}
+                    {% else %}
+                        Guest User
+                    {% endif %}
+                </div>
+
+                <div class="profile-role">
+                    {% if request.user.is_authenticated %}
+                        {{ request.user.get_role_display|default:"User" }}
+                    {% else %}
+                        Visitor
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</header>

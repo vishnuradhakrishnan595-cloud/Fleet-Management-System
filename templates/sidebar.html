@@ -1,0 +1,129 @@
+
+<aside class="sidebar" id="mainSidebar">
+
+    <div class="sidebar-brand">
+
+        <div class="brand-icon">
+            🚚
+        </div>
+
+        <div>
+            <div class="brand-name">FLEETPRO</div>
+            <div class="brand-subtitle">Fleet Management</div>
+        </div>
+
+    </div>
+
+    <div class="sidebar-content">
+
+        <div class="menu-label">MAIN MENU</div>
+
+        <ul class="sidebar-menu">
+
+            <li>
+                <a href="/" class="{% if request.path == '/' %}active{% endif %}">
+                    <span class="menu-icon">▦</span>
+                    Dashboard
+                </a>
+            </li>
+
+        </ul>
+
+        <div class="menu-label">FLEET OPERATIONS</div>
+
+        <ul class="sidebar-menu">
+
+            <li>
+                <a href="/vehicles/" class="{% if '/vehicles/' in request.path %}active{% endif %}">
+                    <span class="menu-icon">🚛</span>
+                    Vehicles
+                </a>
+            </li>
+
+            <li>
+                <a href="/drivers/" class="{% if '/drivers/' in request.path %}active{% endif %}">
+                    <span class="menu-icon">👨</span>
+                    Drivers
+                </a>
+            </li>
+
+            <li>
+                <a href="/trips/" class="{% if '/trips/' in request.path %}active{% endif %}">
+                    <span class="menu-icon">🗺️</span>
+                    Trips
+                </a>
+            </li>
+
+            <li>
+                <a href="/fuel/" class="{% if '/fuel/' in request.path %}active{% endif %}">
+                    <span class="menu-icon">⛽</span>
+                    Fuel Management
+                </a>
+            </li>
+
+            <li>
+                <a href="/maintenance/" class="{% if '/maintenance/' in request.path %}active{% endif %}">
+                    <span class="menu-icon">🔧</span>
+                    Maintenance
+                </a>
+            </li>
+
+        </ul>
+
+        <div class="menu-label">ADMINISTRATION</div>
+
+        <ul class="sidebar-menu">
+
+            <li>
+                <a href="/expenses/" class="{% if '/expenses/' in request.path %}active{% endif %}">
+                    <span class="menu-icon">₹</span>
+                    Expenses
+                </a>
+            </li>
+
+            <li>
+                <a href="/documents/" class="{% if '/documents/' in request.path %}active{% endif %}">
+                    <span class="menu-icon">📁</span>
+                    Documents
+                </a>
+            </li>
+
+            <li>
+                <a href="/incidents/" class="{% if '/incidents/' in request.path %}active{% endif %}">
+                    <span class="menu-icon">⚠️</span>
+                    Incidents
+                </a>
+            </li>
+
+            <li>
+                <a href="/notifications/" class="{% if '/notifications/' in request.path %}active{% endif %}">
+                    <span class="menu-icon">🔔</span>
+                    Notifications
+                </a>
+            </li>
+
+            <li>
+                <a href="/reports/" class="{% if '/reports/' in request.path %}active{% endif %}">
+                    <span class="menu-icon">📊</span>
+                    Reports
+                </a>
+            </li>
+
+        </ul>
+
+        <div class="menu-label">ACCOUNT</div>
+
+        <ul class="sidebar-menu">
+
+            <li>
+                <a href="/accounts/">
+                    <span class="menu-icon">⚙️</span>
+                    Account
+                </a>
+            </li>
+
+        </ul>
+
+    </div>
+
+</aside>
