@@ -38,18 +38,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-   
-    "accounts",
-    "vehicles",
-    "drivers",
-    "trips",
-    "fuel",
-    "maintenance",
-    "expenses",
-    "documents",
-    "incidents",
-    "reports",
-    "notifications",
+
+    'accounts',
+    'vehicles',
+    'drivers',
+    'trips',
+    'fuel',
+    'maintenance',
+    'expenses',
+    'documents',
+    'incidents',
+    'notifications',
+    'reports',
 ]
 
 
