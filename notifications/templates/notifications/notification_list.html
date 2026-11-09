@@ -1,0 +1,125 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>Notifications</h2>
+            <p class="text-muted mb-0">
+                Stay updated about your fleet activities.
+            </p>
+        </div>
+
+        <div class="d-flex gap-2">
+            <span class="badge bg-danger align-self-center">
+                {{ unread_count }} Unread
+            </span>
+
+            {% if unread_count > 0 %}
+            <form method="POST" action="{% url 'mark_all_read' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-primary">
+                    Mark All as Read
+                </button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            {% for notification in notifications %}
+
+                <div class="d-flex justify-content-between align-items-start
+                    border-bottom py-3
+                    {% if not notification.is_read %}bg-light{% endif %}">
+
+                    <div class="d-flex gap-3">
+
+                        <div>
+                            {% if notification.notification_type == 'trip' %}
+                                <span class="badge bg-primary">Trip</span>
+                            {% elif notification.notification_type == 'fuel' %}
+                                <span class="badge bg-warning text-dark">Fuel</span>
+                            {% elif notification.notification_type == 'maintenance' %}
+                                <span class="badge bg-info text-dark">Maintenance</span>
+                            {% elif notification.notification_type == 'expense' %}
+                                <span class="badge bg-success">Expense</span>
+                            {% elif notification.notification_type == 'document' %}
+                                <span class="badge bg-secondary">Document</span>
+                            {% elif notification.notification_type == 'incident' %}
+                                <span class="badge bg-danger">Incident</span>
+                            {% else %}
+                                <span class="badge bg-dark">System</span>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <h6 class="mb-1">
+                                <a href="{% url 'notification_detail' notification.pk %}"
+                                   class="text-decoration-none text-dark">
+                                    {{ notification.title }}
+                                </a>
+
+                                {% if not notification.is_read %}
+                                    <span class="badge bg-primary">New</span>
+                                {% endif %}
+                            </h6>
+
+                            <p class="text-muted mb-1">
+                                {{ notification.message|truncatechars:120 }}
+                            </p>
+
+                            <small class="text-muted">
+                                {{ notification.created_at|date:"d M Y, h:i A" }}
+                            </small>
+                        </div>
+
+                    </div>
+
+                    <a href="{% url 'notification_delete' notification.pk %}"
+                       class="btn btn-sm btn-outline-danger">
+                        Delete
+                    </a>
+
+                </div>
+
+            {% empty %}
+
+                <div class="text-center py-5">
+                    <h5>No notifications</h5>
+                    <p class="text-muted">
+                        You don't have any notifications yet.
+                    </p>
+                </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+
+    {% if notifications %}
+    <div class="mt-3 text-end">
+        <form method="POST" action="{% url 'notification_delete_all_read' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger btn-sm">
+                Delete All Read Notifications
+            </button>
+        </form>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

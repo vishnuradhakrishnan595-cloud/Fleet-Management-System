@@ -40,6 +40,8 @@ urlpatterns = [
 
     # Maintenance
     path('maintenance/', include('maintenance.urls')),
+    # Notifications
+    path('notifications/', include('notifications.urls')),
 ]
 
 
