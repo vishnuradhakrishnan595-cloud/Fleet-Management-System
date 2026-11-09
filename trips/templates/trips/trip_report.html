@@ -1,0 +1,536 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .report-heading {
+        font-weight: 700;
+        color: #202938;
+    }
+
+    .report-subtitle {
+        color: #7b8493;
+    }
+
+    .stat-card {
+        border: 1px solid #e9edf2;
+        border-radius: 12px;
+        transition: transform 0.2s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-3px);
+    }
+
+    .stat-label {
+        color: #77808e;
+        font-size: 14px;
+    }
+
+    .stat-value {
+        font-size: 27px;
+        font-weight: 700;
+        color: #202938;
+    }
+
+    .report-card {
+        border: 0;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .report-card .card-header {
+        background: #fff;
+        padding: 18px 20px;
+        border-bottom: 1px solid #edf0f3;
+    }
+
+    .table th {
+        font-size: 13px;
+        color: #596273;
+        white-space: nowrap;
+        background: #f7f8fa;
+    }
+
+    .table td {
+        font-size: 13px;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    .status-badge {
+        padding: 6px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .status-scheduled {
+        background: #e8f0ff;
+        color: #2457a7;
+    }
+
+    .status-progress {
+        background: #fff2d8;
+        color: #956000;
+    }
+
+    .status-completed {
+        background: #e3f6e9;
+        color: #18743a;
+    }
+
+    .status-cancelled {
+        background: #fde8e8;
+        color: #b42318;
+    }
+
+    @media print {
+        .no-print {
+            display: none !important;
+        }
+
+        .container-fluid {
+            padding: 0 !important;
+        }
+
+        .card {
+            box-shadow: none !important;
+            border: 1px solid #ddd !important;
+            break-inside: avoid;
+        }
+
+        body {
+            background: #fff !important;
+        }
+
+        .table {
+            font-size: 10px;
+        }
+    }
+</style>
+
+<div class="container-fluid py-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+
+        <div>
+            <h2 class="report-heading mb-1">Trip Report</h2>
+            <p class="report-subtitle mb-0">
+                Trip performance, vehicle utilization and driver activity
+            </p>
+        </div>
+
+        <div class="d-flex gap-2 no-print">
+            <a href="{% url 'report_dashboard' %}"
+               class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Back
+            </a>
+
+            <button onclick="window.print()" class="btn btn-dark">
+                <i class="bi bi-printer"></i> Print Report
+            </button>
+        </div>
+
+    </div>
+
+
+    <!-- Date Filter -->
+    <div class="card shadow-sm report-card mb-4 no-print">
+
+        <div class="card-body p-4">
+
+            <form method="GET">
+
+                <div class="row g-3 align-items-end">
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">
+                            Start Date
+                        </label>
+
+                        <input
+                            type="date"
+                            name="start_date"
+                            value="{{ start_date }}"
+                            class="form-control"
+                        >
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">
+                            End Date
+                        </label>
+
+                        <input
+                            type="date"
+                            name="end_date"
+                            value="{{ end_date }}"
+                            class="form-control"
+                        >
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <button type="submit" class="btn btn-primary">
+                            Apply Filter
+                        </button>
+
+                        <a href="{% url 'trip_report' %}"
+                           class="btn btn-outline-secondary">
+                            Reset
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- Statistics -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card stat-card shadow-sm h-100">
+                <div class="card-body p-4">
+                    <p class="stat-label mb-2">Total Trips</p>
+                    <h3 class="stat-value">{{ total_trips }}</h3>
+                    <small class="text-muted">All trip records</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card stat-card shadow-sm h-100">
+                <div class="card-body p-4">
+                    <p class="stat-label mb-2">Completed Trips</p>
+                    <h3 class="stat-value text-success">
+                        {{ completed_trips }}
+                    </h3>
+                    <small class="text-muted">Successfully completed</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card stat-card shadow-sm h-100">
+                <div class="card-body p-4">
+                    <p class="stat-label mb-2">In Progress</p>
+                    <h3 class="stat-value text-warning">
+                        {{ in_progress_trips }}
+                    </h3>
+                    <small class="text-muted">Currently active</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card stat-card shadow-sm h-100">
+                <div class="card-body p-4">
+                    <p class="stat-label mb-2">Total Distance</p>
+                    <h3 class="stat-value">
+                        {{ total_distance|floatformat:2 }}
+                    </h3>
+                    <small class="text-muted">Distance units as recorded</small>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Trip Status Summary -->
+    <div class="card report-card shadow-sm mb-4">
+
+        <div class="card-header">
+            <h5 class="fw-bold mb-0">Trip Status Summary</h5>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+                <div class="col-md-3">
+                    <div class="p-3 rounded bg-light">
+                        <div class="text-muted small">Scheduled</div>
+                        <h4 class="fw-bold mb-0">{{ scheduled_trips }}</h4>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="p-3 rounded bg-light">
+                        <div class="text-muted small">In Progress</div>
+                        <h4 class="fw-bold mb-0">{{ in_progress_trips }}</h4>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="p-3 rounded bg-light">
+                        <div class="text-muted small">Completed</div>
+                        <h4 class="fw-bold mb-0">{{ completed_trips }}</h4>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="p-3 rounded bg-light">
+                        <div class="text-muted small">Cancelled</div>
+                        <h4 class="fw-bold mb-0">{{ cancelled_trips }}</h4>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Vehicle Summary -->
+    <div class="card report-card shadow-sm mb-4">
+
+        <div class="card-header">
+            <h5 class="fw-bold mb-0">Vehicle-wise Trip Summary</h5>
+        </div>
+
+        <div class="card-body table-responsive">
+
+            <table class="table table-hover">
+
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Vehicle Number</th>
+                        <th>Total Trips</th>
+                        <th>Total Distance</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for item in vehicle_summary %}
+
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+
+                        <td class="fw-semibold">
+                            {{ item.vehicle__vehicle_number }}
+                        </td>
+
+                        <td>{{ item.total_trips }}</td>
+
+                        <td>{{ item.total_distance|floatformat:2 }}</td>
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-4">
+                            No vehicle trip information available.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- Driver Summary -->
+    <div class="card report-card shadow-sm mb-4">
+
+        <div class="card-header">
+            <h5 class="fw-bold mb-0">Driver-wise Trip Summary</h5>
+        </div>
+
+        <div class="card-body table-responsive">
+
+            <table class="table table-hover">
+
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Driver Username</th>
+                        <th>Total Trips</th>
+                        <th>Total Distance</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for item in driver_summary %}
+
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+
+                        <td class="fw-semibold">
+                            {{ item.driver__username }}
+                        </td>
+
+                        <td>{{ item.total_trips }}</td>
+
+                        <td>{{ item.total_distance|floatformat:2 }}</td>
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-4">
+                            No driver trip information available.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- Complete Trip Details -->
+    <div class="card report-card shadow-sm">
+
+        <div class="card-header d-flex justify-content-between align-items-center">
+
+            <h5 class="fw-bold mb-0">Complete Trip Details</h5>
+
+            <span class="text-muted small">
+                {{ total_trips }} records
+            </span>
+
+        </div>
+
+        <div class="card-body table-responsive">
+
+            <table class="table table-hover align-middle">
+
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Vehicle</th>
+                        <th>Driver</th>
+                        <th>Start Location</th>
+                        <th>Destination</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Start Odometer</th>
+                        <th>End Odometer</th>
+                        <th>Distance</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for trip in trips %}
+
+                    <tr>
+
+                        <td>{{ forloop.counter }}</td>
+
+                        <td class="fw-semibold">
+                            {{ trip.vehicle.vehicle_number }}
+                        </td>
+
+                        <td>
+                            {{ trip.driver.get_full_name|default:trip.driver.username }}
+                        </td>
+
+                        <td>{{ trip.start_location }}</td>
+
+                        <td>{{ trip.destination }}</td>
+
+                        <td>
+                            {{ trip.start_date|date:"d M Y, h:i A" }}
+                        </td>
+
+                        <td>
+                            {% if trip.end_date %}
+                                {{ trip.end_date|date:"d M Y, h:i A" }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+
+                        <td>{{ trip.starting_odometer }}</td>
+
+                        <td>
+                            {{ trip.ending_odometer|default:"-" }}
+                        </td>
+
+                        <td class="fw-semibold">
+                            {{ trip.distance|floatformat:2 }}
+                        </td>
+
+                        <td>
+
+                            {% if trip.status == 'scheduled' %}
+                                <span class="status-badge status-scheduled">
+                                    Scheduled
+                                </span>
+
+                            {% elif trip.status == 'in_progress' %}
+                                <span class="status-badge status-progress">
+                                    In Progress
+                                </span>
+
+                            {% elif trip.status == 'completed' %}
+                                <span class="status-badge status-completed">
+                                    Completed
+                                </span>
+
+                            {% elif trip.status == 'cancelled' %}
+                                <span class="status-badge status-cancelled">
+                                    Cancelled
+                                </span>
+
+                            {% else %}
+                                <span class="badge bg-secondary">
+                                    {{ trip.get_status_display }}
+                                </span>
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="11" class="text-center py-5 text-muted">
+                            No trip records found for the selected dates.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <div class="text-center text-muted small mt-4">
+        Fleet Management System — Trip Report
+    </div>
+
+</div>
+
+{% endblock %}
