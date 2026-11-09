@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fleet Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fc;
+            color: #1e293b;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+        }
+
+        .card a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Fleet Management System</h1>
+    <p>Welcome to your fleet management dashboard.</p>
+
+    <div class="grid">
+        <div class="card"><a href="/vehicles/">Vehicle Management</a></div>
+        <div class="card"><a href="/drivers/">Driver Management</a></div>
+        <div class="card"><a href="/trips/">Trip Management</a></div>
+        <div class="card"><a href="/fuel/">Fuel Management</a></div>
+        <div class="card"><a href="/maintenance/">Maintenance</a></div>
+        <div class="card"><a href="/expenses/">Expense Management</a></div>
+        <div class="card"><a href="/documents/">Documents</a></div>
+        <div class="card"><a href="/incidents/">Incidents</a></div>
+        <div class="card"><a href="/notifications/">Notifications</a></div>
+        <div class="card"><a href="/reports/">Reports</a></div>
+    </div>
+</div>
+
+</body>
+</html>

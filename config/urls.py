@@ -10,26 +10,10 @@ from django.http import HttpResponse
 # HOME PAGE
 # --------------------------------------------------
 
+from django.shortcuts import render
+
 def home(request):
-    return HttpResponse(
-        """
-        <html>
-            <head>
-                <title>Fleet Management System</title>
-            </head>
-            <body style="
-                font-family: Arial;
-                text-align: center;
-                padding-top: 100px;
-                background: #f4f7fc;
-            ">
-                <h1>Fleet Management System</h1>
-                <p>Welcome to Fleet Management System!</p>
-                <a href="/admin/">Open Admin Panel</a>
-            </body>
-        </html>
-        """
-    )
+    return render(request, 'dashboard.html')
 
 
 # --------------------------------------------------
