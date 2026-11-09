@@ -1,0 +1,148 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold">Expense Report</h2>
+            <p class="text-muted">Fleet expenses and category-wise spending</p>
+        </div>
+
+        <button onclick="window.print()" class="btn btn-dark">Print Report</button>
+    </div>
+
+    <form method="GET" class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label">Start Date</label>
+                    <input type="date" name="start_date"
+                           value="{{ start_date }}" class="form-control">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">End Date</label>
+                    <input type="date" name="end_date"
+                           value="{{ end_date }}" class="form-control">
+                </div>
+
+                <div class="col-md-4">
+                    <button class="btn btn-primary">Apply Filter</button>
+                    <a href="{% url 'expense_report' %}"
+                       class="btn btn-outline-secondary">Reset</a>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <p class="text-muted">Total Expense Records</p>
+                    <h3 class="fw-bold">{{ total_records }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <p class="text-muted">Total Expense Amount</p>
+                    <h3 class="fw-bold">₹{{ total_amount|floatformat:2 }}</h3>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0">Category-wise Expense Summary</h5>
+        </div>
+
+        <div class="card-body table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Category</th>
+                        <th>Total Records</th>
+                        <th>Total Amount</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for item in category_summary %}
+                    <tr>
+                        <td>{{ item.category|title }}</td>
+                        <td>{{ item.total_records }}</td>
+                        <td>₹{{ item.total_amount|floatformat:2 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center">
+                            No expense categories found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0">Expense Transactions</h5>
+        </div>
+
+        <div class="card-body table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th>Title</th>
+                        <th>Vehicle</th>
+                        <th>Category</th>
+                        <th>Amount</th>
+                        <th>Recorded By</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for record in records %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ record.expense_date|date:"d M Y" }}</td>
+                        <td>{{ record.title }}</td>
+                        <td>
+                            {% if record.vehicle %}
+                                {{ record.vehicle.vehicle_number }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>{{ record.get_category_display }}</td>
+                        <td>₹{{ record.amount|floatformat:2 }}</td>
+                        <td>{{ record.recorded_by|default:"-" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center py-4">
+                            No expense records found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <a href="{% url 'report_dashboard' %}"
+       class="btn btn-outline-secondary mt-3">Back to Reports</a>
+
+</div>
+{% endblock %}

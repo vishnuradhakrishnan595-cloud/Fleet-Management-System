@@ -1,0 +1,132 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold">Maintenance Report</h2>
+            <p class="text-muted">Vehicle servicing and repair history</p>
+        </div>
+        <button onclick="window.print()" class="btn btn-dark">Print Report</button>
+    </div>
+
+    <form method="GET" class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label">Start Date</label>
+                    <input type="date" name="start_date"
+                           value="{{ start_date }}" class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">End Date</label>
+                    <input type="date" name="end_date"
+                           value="{{ end_date }}" class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-primary">Apply Filter</button>
+                    <a href="{% url 'maintenance_report' %}"
+                       class="btn btn-outline-secondary">Reset</a>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <p class="text-muted">Maintenance Records</p>
+                    <h3>{{ total_records }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <p class="text-muted">Total Maintenance Cost</p>
+                    <h3>₹{{ total_cost|floatformat:2 }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0">Maintenance Status Summary</h5>
+        </div>
+        <div class="card-body table-responsive">
+            <table class="table">
+                <thead class="table-light">
+                    <tr>
+                        <th>Status</th>
+                        <th>Total Records</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in status_summary %}
+                    <tr>
+                        <td>{{ item.status|title }}</td>
+                        <td>{{ item.total }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="2" class="text-center">No records found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0">Maintenance Details</h5>
+        </div>
+        <div class="card-body table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Vehicle</th>
+                        <th>Title</th>
+                        <th>Type</th>
+                        <th>Service Date</th>
+                        <th>Next Service</th>
+                        <th>Service Center</th>
+                        <th>Cost</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in records %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ record.vehicle.vehicle_number }}</td>
+                        <td>{{ record.title }}</td>
+                        <td>{{ record.get_maintenance_type_display }}</td>
+                        <td>{{ record.service_date|date:"d M Y" }}</td>
+                        <td>{{ record.next_service_date|date:"d M Y"|default:"-" }}</td>
+                        <td>{{ record.service_center }}</td>
+                        <td>₹{{ record.cost|floatformat:2 }}</td>
+                        <td>{{ record.get_status_display }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="9" class="text-center py-4">
+                            No maintenance records found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <a href="{% url 'report_dashboard' %}"
+       class="btn btn-outline-secondary mt-3">Back to Reports</a>
+
+</div>
+{% endblock %}

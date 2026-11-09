@@ -1,0 +1,137 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
+        <div>
+            <h2 class="fw-bold">Reports Dashboard</h2>
+            <p class="text-muted">Fleet performance and financial overview</p>
+        </div>
+
+        <button onclick="window.print()" class="btn btn-dark">
+            Print Report
+        </button>
+    </div>
+
+    <form method="GET" class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label">Start Date</label>
+                    <input type="date" name="start_date"
+                           value="{{ start_date }}" class="form-control">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">End Date</label>
+                    <input type="date" name="end_date"
+                           value="{{ end_date }}" class="form-control">
+                </div>
+
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary">Apply Filter</button>
+                    <a href="{% url 'report_dashboard' %}"
+                       class="btn btn-outline-secondary">Reset</a>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-xl-4 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted">Total Vehicles</div>
+                    <h2 class="fw-bold mt-2">{{ total_vehicles }}</h2>
+                    <a href="{% url 'vehicle_report' %}">View Vehicle Report →</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted">Total Fuel Cost</div>
+                    <h2 class="fw-bold mt-2">₹{{ total_fuel_cost|floatformat:2 }}</h2>
+                    <small class="text-muted">
+                        {{ total_fuel_quantity|floatformat:2 }} units consumed
+                    </small>
+                    <br>
+                    <a href="{% url 'fuel_report' %}">View Fuel Report →</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted">Maintenance Cost</div>
+                    <h2 class="fw-bold mt-2">₹{{ total_maintenance_cost|floatformat:2 }}</h2>
+                    <small class="text-muted">{{ maintenance_count }} records</small>
+                    <br>
+                    <a href="{% url 'maintenance_report' %}">View Maintenance Report →</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-6 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted">Total Expenses</div>
+                    <h2 class="fw-bold mt-2">₹{{ total_expenses|floatformat:2 }}</h2>
+                    <small class="text-muted">{{ expense_count }} records</small>
+                    <br>
+                    <a href="{% url 'expense_report' %}">View Expense Report →</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-6 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted">Total Operational Cost</div>
+                    <h2 class="fw-bold text-primary mt-2">
+                        ₹{{ total_operational_cost|floatformat:2 }}
+                    </h2>
+                    <small class="text-muted">
+                        Fuel + Maintenance + Expenses
+                    </small>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0 fw-bold">Available Reports</h5>
+        </div>
+
+        <div class="list-group list-group-flush">
+            <a href="{% url 'vehicle_report' %}"
+               class="list-group-item list-group-item-action p-3">
+                Vehicle Report <span class="float-end">→</span>
+            </a>
+
+            <a href="{% url 'fuel_report' %}"
+               class="list-group-item list-group-item-action p-3">
+                Fuel Report <span class="float-end">→</span>
+            </a>
+
+            <a href="{% url 'maintenance_report' %}"
+               class="list-group-item list-group-item-action p-3">
+                Maintenance Report <span class="float-end">→</span>
+            </a>
+
+            <a href="{% url 'expense_report' %}"
+               class="list-group-item list-group-item-action p-3">
+                Expense Report <span class="float-end">→</span>
+            </a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

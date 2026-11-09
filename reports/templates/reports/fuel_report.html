@@ -1,0 +1,157 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold">Fuel Report</h2>
+            <p class="text-muted">Fuel consumption and expenditure analysis</p>
+        </div>
+
+        <button onclick="window.print()" class="btn btn-dark">Print Report</button>
+    </div>
+
+    <form method="GET" class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label">Start Date</label>
+                    <input type="date" name="start_date"
+                           value="{{ start_date }}" class="form-control">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">End Date</label>
+                    <input type="date" name="end_date"
+                           value="{{ end_date }}" class="form-control">
+                </div>
+
+                <div class="col-md-4">
+                    <button class="btn btn-primary">Apply Filter</button>
+                    <a href="{% url 'fuel_report' %}"
+                       class="btn btn-outline-secondary">Reset</a>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <p class="text-muted">Fuel Records</p>
+                    <h3 class="fw-bold">{{ total_records }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <p class="text-muted">Total Fuel Quantity</p>
+                    <h3 class="fw-bold">{{ total_quantity|floatformat:2 }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <p class="text-muted">Total Fuel Cost</p>
+                    <h3 class="fw-bold">₹{{ total_cost|floatformat:2 }}</h3>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0">Vehicle-wise Fuel Summary</h5>
+        </div>
+
+        <div class="card-body table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Vehicle Number</th>
+                        <th>Total Records</th>
+                        <th>Quantity</th>
+                        <th>Total Cost</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for item in vehicle_summary %}
+                    <tr>
+                        <td>{{ item.vehicle__vehicle_number }}</td>
+                        <td>{{ item.total_records }}</td>
+                        <td>{{ item.total_quantity|floatformat:2 }}</td>
+                        <td>₹{{ item.total_cost|floatformat:2 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center">
+                            No fuel summary available.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0">Fuel Transaction Details</h5>
+        </div>
+
+        <div class="card-body table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th>Vehicle</th>
+                        <th>Driver</th>
+                        <th>Fuel Type</th>
+                        <th>Quantity</th>
+                        <th>Price / Unit</th>
+                        <th>Total Cost</th>
+                        <th>Odometer</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for record in records %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ record.fuel_date|date:"d M Y" }}</td>
+                        <td>{{ record.vehicle.vehicle_number }}</td>
+                        <td>{{ record.driver|default:"-" }}</td>
+                        <td>{{ record.get_fuel_type_display }}</td>
+                        <td>{{ record.quantity }}</td>
+                        <td>₹{{ record.price_per_unit|floatformat:2 }}</td>
+                        <td>₹{{ record.total_cost|floatformat:2 }}</td>
+                        <td>{{ record.odometer_reading }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="9" class="text-center py-4">
+                            No fuel records found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <a href="{% url 'report_dashboard' %}"
+       class="btn btn-outline-secondary mt-3">Back to Reports</a>
+
+</div>
+{% endblock %}
